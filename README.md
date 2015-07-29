@@ -1,4 +1,5 @@
 This code will take a snapshot with raspistill and upload it to dropbox.
+A traffic light can be used to show status.
 
 You will need a config file with some parameters:
 
@@ -14,7 +15,7 @@ Those parameters are given by dropbox when you register an app.
 
 Then you can run this with
 
-    go run config.go upload.go
+    go run config.go cam.go
 
 ### Install go on Raspberry PI
 
