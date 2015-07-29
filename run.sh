@@ -1,1 +1,1 @@
-go run config.go cam.go
+/usr/local/go/bin/go run config.go cam.go

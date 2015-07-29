@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"os/exec"
 	"github.com/stacktic/dropbox"
+	"github.com/stianeikeland/go-rpio"	
 )
 
 func NopReadCloser(x io.Reader) io.ReadCloser {
@@ -20,6 +21,14 @@ type nopReadCloser struct {
 
 func (x *nopReadCloser) Close() error {
 	return nil
+}
+
+func toggleLight(pinNr int) {
+	pin := rpio.Pin(pinNr)
+	pin.Output()
+	pin.High()
+	time.Sleep(500 * time.Millisecond)
+	pin.Low()
 }
 
 func shoot(db *dropbox.Dropbox) {
@@ -57,6 +66,16 @@ func shoot(db *dropbox.Dropbox) {
 
 func main() {
 
+	err := rpio.Open()
+	if(err != nil) {
+		fmt.Println("rpio.Open()")
+                fmt.Println(err)
+        }      
+	// Unmap gpio memory when done
+	defer rpio.Close()
+
+	toggleLight(9)
+
 	var db *dropbox.Dropbox
 
 	db = dropbox.NewDropbox()
@@ -64,8 +83,9 @@ func main() {
 	db.SetAppInfo(clientid, clientsecret)
 	db.SetAccessToken(token)
 
-	//for i := 0; i < 2500; i++ {
-		shoot(db)
-	//	time.Sleep(5 * time.Minute)
-	//}
+	toggleLight(10)
+
+	shoot(db)
+
+	toggleLight(11)
 }
